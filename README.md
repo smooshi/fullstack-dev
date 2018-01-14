@@ -1,2 +1,3 @@
-# fullstack-dev
-Full stack -websovelluskehitys 2018
+# Full stack -websovelluskehitys 2018
+
+Viikko 0 tehtävät:
