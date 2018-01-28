@@ -6,3 +6,8 @@ Viikko 1 tehtävät:
   - osa
   - unicafe
   - anekdootit
+
+Viikko 2 tehtävät:
+  - osa (muutama)
+  - puhelinluettelo
+  - maat
