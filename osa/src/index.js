@@ -1,6 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import Kurssi from './Kurssi'
 
+// Alla olevat ovat viikon 1 koodia pois kommentoituun Appiin asti
+// VIIKKO 1:
 const Otsikko = (kurssi) => {
     return(
       <div>
@@ -35,28 +38,79 @@ const Yhteensa = (osat) => {
   )
 }
 
+// const App = () => {
+//   const kurssi =  {
+//     nimi: 'Half Stack -sovelluskehitys',
+//     osat: [
+//   {
+//     nimi:'Reactin perusteet',
+//     tehtavia: 10
+//   },
+//   {
+//     nimi:'Tiedonvälitys propseilla',
+//     tehtavia: 7
+//   },
+//   {
+//     nimi:'Komponenttien tila',
+//     tehtavia: 14
+//   }]}
+//
+//   return (
+//     <div>
+//       <Otsikko name={kurssi.nimi} />
+//       <Sisalto osat={kurssi.osat} />
+//       <Yhteensa osat={kurssi.osat} />
+//     </div>
+//   )
+// }
+
+//Viikko 2
 const App = () => {
-  const kurssi =  {
-    nimi: 'Half Stack -sovelluskehitys',
-    osat: [
-  {
-    nimi:'Reactin perusteet',
-    tehtavia: 10
-  },
-  {
-    nimi:'Tiedonvälitys propseilla',
-    tehtavia: 7
-  },
-  {
-    nimi:'Komponenttien tila',
-    tehtavia: 14
-  }]}
+  const kurssit = [
+    {
+      nimi: 'Half Stack -sovelluskehitys',
+      id: 1,
+      osat: [
+        {
+          nimi: 'Reactin perusteet',
+          tehtavia: 10,
+          id: 1
+        },
+        {
+          nimi: 'Tiedonvälitys propseilla',
+          tehtavia: 7,
+          id: 2
+        },
+        {
+          nimi: 'Komponenttien tila',
+          tehtavia: 14,
+          id: 3
+        }
+      ]
+    },
+    {
+      nimi: 'Node.js',
+      id: 2,
+      osat: [
+        {
+          nimi: 'Routing',
+          tehtavia: 3,
+          id: 1
+        },
+        {
+          nimi: 'Middlewaret',
+          tehtavia: 7,
+          id: 2
+        }
+      ]
+    }
+  ]
 
   return (
     <div>
-      <Otsikko name={kurssi.nimi} />
-      <Sisalto osat={kurssi.osat} />
-      <Yhteensa osat={kurssi.osat} />
+    <div>
+      {kurssit.map(kurssi=><Kurssi key={kurssit} kurssi={kurssi}/>)}
+    </div>
     </div>
   )
 }
