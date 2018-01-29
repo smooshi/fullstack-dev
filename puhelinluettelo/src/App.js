@@ -2,6 +2,8 @@ import React from 'react';
 import Lista from './Lista'
 import Otsikko from './Otsikko'
 import axios from 'axios'
+import Persons from './Persons'
+import './App.css'
 
 class App extends React.Component {
   constructor(props) {
@@ -10,17 +12,16 @@ class App extends React.Component {
       persons: [],
       newName: '',
       newNumber: '',
-      filter:''
+      filter:'',
+      error:''
     }
   }
 
   componentWillMount() {
-    console.log('will mount')
-    axios
-      .get('http://localhost:3001/persons')
+    Persons
+      .getAll()
       .then(response => {
-        console.log('promise fulfilled')
-        this.setState({ persons: response.data })
+        this.setState({persons: response.data})
       })
   }
 
@@ -28,24 +29,86 @@ class App extends React.Component {
     event.preventDefault()
 
     if (this.state.persons.filter(e => e.name === this.state.newName).length > 0)  {
-      console.log("Ayo sis!")
+      if (window.confirm("Ookko varma et haluat vaihtaa sen numeron?")) {
+      const persu = this.state.persons.find(p => p.name === this.state.newName)
+      const uusiPersu = persu
+      uusiPersu.number = this.state.newNumber
+
+      Persons
+        .update(uusiPersu.id, uusiPersu)
+        .then(uusiPersu => {
+          Persons
+            .getAll()
+            .then(response => {
+              this.setState({
+                persons: response.data,
+                error: "Muokkasin sen!",
+                newName: '',
+                newNumber: ''
+              })
+              setTimeout(() => {
+                this.setState({error: null})
+              }, 5000)
+            })
+        })
+        .catch(error => {
+        alert(`Henkilö on jo valitettavasti poistettu palvelimelta`)
+        this.setState({ persons: this.state.persons.filter(n => n.id !== uusiPersu.id) })
+      })
+      }
+        // .catch(error => {
+        //   alert(`muistiinpano '${note.content}' on jo valitettavasti poistettu palvelimelta`)
+        //   this.setState({ notes: this.state.notes.filter(n => n.id !== id) })
+        // })
+
       } else {
       const nameObject = {
         name: this.state.newName,
         number: this.state.newNumber,
-        id: this.state.persons.length + 1,
-        visible: true
+        id: this.state.persons.length + 1
       }
 
-      const persons = this.state.persons.concat(nameObject)
-      this.setState({
-        persons,
-        newName: '',
-        newNumber: ''
-      })
+      //const persons = this.state.persons.concat(nameObject)
+
+      Persons
+          .create(nameObject)
+          .then(response => {
+            this.setState({
+              persons: this.state.persons.concat(response.data),
+              error: "Lisäsin sen!",
+              newName: '',
+              newNumber: ''
+            })
+            setTimeout(() => {
+            this.setState({error: null})
+          }, 3000)
+          })
     }
 }
 
+  muokkaaNumero = () => {
+
+  }
+  poista = (person) => {
+    //console.log(person)
+    if (window.confirm("Ookko varma et haluut poistaa?")) {
+    Persons
+      .deleter(person.person.id, person.person)
+      .then(response => {
+        Persons
+          .getAll()
+          .then(response => {
+            this.setState({
+              persons: response.data,
+              error: "TUHOSIN SEN! BWAHAHAH!"
+            })
+            setTimeout(() => {
+            this.setState({error: null})
+          }, 3000)
+          })
+      })
+    }
+  }
 
   toggleVisible = () => {
     this.setState({showAll: !this.state.showAll})
@@ -70,9 +133,30 @@ class App extends React.Component {
       this.state.filter === undefined ?
       this.state.persons : this.state.persons.filter(person => person.name.indexOf(this.state.filter) + 1 )
 
+      const DeleteButton = (person) => {
+        return(
+          <div>
+          <button onClick={ () => this.poista(person)}>
+            Poista
+          </button>
+          </div>
+        )
+      }
+
+      const Notification = ({ message }) => {
+        if (message === null) {
+          return null
+        }
+        return (
+          <div className="error">
+            {message}
+          </div>
+        )
+      }
 
       return (
       <div>
+        <Notification message={this.state.error} />
         <Otsikko title="Puhelinluettelo" />
         Rajaa: <input value ={this.state.filter} onChange={this.filterKasittely}/>
         <form onSubmit={this.uusiNimi}>
@@ -87,7 +171,7 @@ class App extends React.Component {
           </div>
         </form>
         <Otsikko title="Numerot" />
-        {personsToShow.map(person => <Lista key={person.name} person={person} />)}
+        {personsToShow.map(person => <div><Lista key={person.name} person={person} /> <DeleteButton person={person} /> </div>)}
       </div>
     )
   }
