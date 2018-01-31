@@ -11,3 +11,6 @@ Viikko 2 tehtävät:
   - osa (muutama)
   - puhelinluettelo
   - maat
+
+Viikko 3: 
+  - https://github.com/smooshi/fullStack_week3
