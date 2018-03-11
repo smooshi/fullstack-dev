@@ -14,3 +14,8 @@ Viikko 2 tehtävät:
 
 Viikko 3: 
   - https://github.com/smooshi/fullStack_week3
+
+Viikko 5:
+  - unicafe_test
+  - redux_anecdotes
+  - bloglist-frontend
